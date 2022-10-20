@@ -4,6 +4,8 @@ const cryptoPrice = document.getElementById('crypto-price')
 const currTime = document.getElementById('curr-time')
 const weatherIcon = document.getElementById('weather-icon')
 const weatherCity = document.getElementById('weather-city')
+const quotesText = document.getElementById('quotes-text');
+const quotesAuthor = document.getElementById('quotes-author')
 
 fetch('https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature')
 .then((response) => response.json())
@@ -44,10 +46,22 @@ navigator.geolocation.getCurrentPosition((position) => {
     console.log(data)
 
     weatherIcon.innerHTML = `<img src='http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png'/>
-                         <p>${data.main.temp}</p>
+                         <p>${data.main.temp}<sup>o</sup>C</p>
                          `
     weatherCity.innerHTML =`<h2>${data.name}</h2>`
 });
   });
 
  
+function getQuotes(){
+    fetch('https://type.fit/api/quotes')
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      let rand = Math.floor(Math.random()*data.length)
+      quotesAuthor.innerHTML = `<h3>- ${data[rand].author}</h3>`
+      quotesText.innerHTML =`<p>${data[rand].text}</p>`
+  });
+}
+getQuotes()
+setInterval(getQuotes, 6000)
